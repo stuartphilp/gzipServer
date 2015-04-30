@@ -8,6 +8,7 @@ import time
 import sys
 import BaseHTTPServer
 import gzip
+import simplejson as json
 
 HOST_NAME = '127.0.0.1'
 
@@ -53,9 +54,10 @@ class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
       else:
         plainData = postData
 
-      filename = "report" + str(gReportCount) + ".txt"
+      jsonData = json.loads(plainData)
+      filename = "report" + str(gReportCount) + ".json"
       plainFile = open(filename, "w")
-      plainFile.write(plainData)
+      json.dump(jsonData, plainFile, sort_keys = False, indent = 2)
       plainFile.close()
 
       s.send_response(200)
